@@ -6,7 +6,7 @@ class Flowwing < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
-      sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      sha256 "c82e149f6bdde6b1d7151428fdaa1a58e8a24346b2636f0d3774f359084283f1"
     else
       odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
@@ -14,7 +14,7 @@ class Flowwing < Formula
 
   on_linux do
     url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-linux-x86_64.deb"
-    sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    sha256 "0cbc4dfab7cce3adf012042c40ec4469080740f3752daf1b76039d3ab39b2ab3"
   end
 
   # Do not use  here: it is not defined on many Homebrew versions (e.g. macOS),
@@ -25,19 +25,21 @@ class Flowwing < Formula
   def install
     if OS.mac? && Hardware::CPU.arm?
       # macOS ARM64
-      lib_dir = "FlowWing-v0.0.3-alpha-macos-arm64"
-      mkdir_p lib_dir
-      system "unzip", "-d", lib_dir, "#{share}/#{lib_dir}.zip"
-      bin.install Dir["#{lib_dir}/bin/*"]
+      #
+      # Homebrew stages/extracts archives into the build directory automatically. The release zip
+      # contains a top-level directory named .
+      root = "FlowWing-#{version}-macos-arm64"
+      bin.install Dir["#{root}/bin/*"]
       # Install each top-level entry under SDK lib (modules/, platform libs, etc.).
       # Using **/* flattens into prefix/lib and breaks lib/modules layout.
-      lib.install Dir["#{lib_dir}/lib/*"]
+      lib.install Dir["#{root}/lib/*"]
     elsif OS.linux?
       # Linux
-      deb_file = "#{share}/FlowWing-v0.0.3-alpha-linux-x86_64.deb"
+      #  is not extracted by Homebrew; use the downloaded file directly.
+      deb_file = cached_download
       system "dpkg", "-x", deb_file, "deb_extracted"
-      bin.install "deb_extracted/usr/local/flow-wing/v0.0.3-alpha/bin/*"
-      lib.install Dir["deb_extracted/usr/local/flow-wing/v0.0.3-alpha/lib/*"]
+      bin.install "deb_extracted/usr/local/flow-wing/#{version}/bin/*"
+      lib.install Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/*"]
     else
       skip "Unsupported platform for Homebrew formula"
     end
