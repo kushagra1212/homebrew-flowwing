@@ -9,10 +9,7 @@ class Flowwing < Formula
 https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
       sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     else
-      # Intel Mac (if available)
-      url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.dmg
-https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
-      sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
   end
 
@@ -29,8 +26,6 @@ https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWin
   end
 
   license "GPL-2.0-only"
-
-  depends_on :macos => :arm64
 
   def install
     if OS.mac? && Hardware::CPU.arm?
