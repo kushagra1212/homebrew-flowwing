@@ -28,10 +28,10 @@ class Flowwing < Formula
       # macOS ARM64 - flat structure matching actual zip contents
       bin.install "bin/FlowWing"
       
-      # Install Darwin-arm64 libraries explicitly
+      # Install Darwin-arm64 libraries explicitly using standard methods
       lib.mkpath("Darwin-arm64")
       Dir["lib/Darwin-arm64/*.a"].each do |f|
-        cp f, "Darwin-arm64/#{File.basename(f)}"
+        Utils.cp f, "Darwin-arm64/#{File.basename(f)}"
       end
       
       # Install modules directory recursively
@@ -45,7 +45,7 @@ class Flowwing < Formula
       
       lib.mkpath("Darwin-arm64") if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib/Darwin-arm64")
       Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/Darwin-arm64/*.a"].each do |f|
-        cp f, "Darwin-arm64/#{File.basename(f)}" if File.exist?(f)
+        Utils.cp f, "Darwin-arm64/#{File.basename(f)}" if File.exist?(f)
       end
       
       lib.install Dir["deb_extracted/usr/local/flow-wing/#{version}/modules/**/*"] if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib/modules")
