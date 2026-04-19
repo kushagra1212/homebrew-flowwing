@@ -7,6 +7,7 @@ class Flowwing < Formula
     if Hardware::CPU.arm?
       url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
       sha256 "c82e149f6bdde6b1d7151428fdaa1a58e8a24346b2636f0d3774f359084283f1"
+
     else
       odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
