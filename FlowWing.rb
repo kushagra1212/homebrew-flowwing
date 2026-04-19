@@ -22,25 +22,31 @@ class Flowwing < Formula
 
   license "GPL-2.0-only"
 
+
   def install
     if OS.mac? && Hardware::CPU.arm?
       # macOS ARM64 - flat structure matching actual zip contents
       bin.install "bin/FlowWing"
       
-      # Explicitly copy all lib files preserving directory structure
+      # Install Darwin-arm64 libraries explicitly
       lib.mkpath("Darwin-arm64")
-      Dir["lib/Darwin-arm64/*.a"].each { |f| cp f, "Darwin-arm64/#{File.basename(f)}" }
+      Dir["lib/Darwin-arm64/*.a"].each do |f|
+        cp f, "Darwin-arm64/#{File.basename(f)}"
+      end
       
+      # Install modules directory recursively
       lib.install Dir["lib/modules/**/*"]
     elsif OS.linux?
-      # Linux
+      # Linux - extract .deb and install files
       deb_file = cached_download
       system "dpkg", "-x", deb_file, "deb_extracted"
       
       bin.install "deb_extracted/usr/local/flow-wing/#{version}/bin/*" if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/bin")
       
       lib.mkpath("Darwin-arm64") if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib/Darwin-arm64")
-      Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/Darwin-arm64/*.a"].each { |f| cp f, "Darwin-arm64/#{File.basename(f)}" if File.exist?(f) }
+      Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/Darwin-arm64/*.a"].each do |f|
+        cp f, "Darwin-arm64/#{File.basename(f)}" if File.exist?(f)
+      end
       
       lib.install Dir["deb_extracted/usr/local/flow-wing/#{version}/modules/**/*"] if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib/modules")
     else
