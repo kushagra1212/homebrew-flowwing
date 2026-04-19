@@ -29,11 +29,8 @@ class Flowwing < Formula
       # Homebrew stages/extracts archives into the build directory automatically. The release zip
       # contains a top-level directory named .
       root = "FlowWing-#{version}-macos-arm64"
-      bin.install "bin/*"
+      bin.install "bin/FlowWing"
       lib.install Dir["lib/**/*"]
-      # Install each top-level entry under SDK lib (modules/, platform libs, etc.).
-      # Using **/* flattens into prefix/lib and breaks lib/modules layout.
-      lib.install Dir["#{root}/lib/*"]
     elsif OS.linux?
       # Linux
       #  is not extracted by Homebrew; use the downloaded file directly.
