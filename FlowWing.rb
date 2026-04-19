@@ -28,15 +28,17 @@ class Flowwing < Formula
       # macOS ARM64 - flat structure matching actual zip contents
       bin.install "bin/FlowWing"
       
-      # Install all lib files preserving directory structure using standard methods
-      lib.install Dir["lib/**/*"]
+      # Use single wildcard; Homebrew natively copies subdirectories recursively
+      lib.install Dir["lib/*"] 
     elsif OS.linux?
       # Linux - extract .deb and install files
       deb_file = cached_download
       system "dpkg", "-x", deb_file, "deb_extracted"
       
-      bin.install "deb_extracted/usr/local/flow-wing/#{version}/bin/*" if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/bin")
-      lib.install Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/**/*"] if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib")
+      bin.install Dir["deb_extracted/usr/local/flow-wing/#{version}/bin/*"] if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/bin")
+      
+      # Apply the same fix here to prevent potential Linux install failures
+      lib.install Dir["deb_extracted/usr/local/flow-wing/#{version}/lib/*"] if Dir.exist?("deb_extracted/usr/local/flow-wing/#{version}/lib")
     else
       skip "Unsupported platform for Homebrew formula"
     end
