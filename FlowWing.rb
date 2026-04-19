@@ -19,11 +19,8 @@ https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWin
     sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   end
 
-  on_windows do
-    url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-windows-x86_64.exe
-https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-windows-x86_64.zip"
-    sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-  end
+  # Do not use  here: it is not defined on many Homebrew versions (e.g. macOS),
+  # and the install path below only supports macOS arm64 and Linux anyway.
 
   license "GPL-2.0-only"
 
