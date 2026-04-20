@@ -6,7 +6,7 @@ class Flowwing < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
-      sha256 "5e6c4513b1a2327f77c7f2e2f04f2eaad7e60abc60acad6e35619d26ba898baa"
+      sha256 "fc81cfb76e0957b3ddf388fda542e8297286bca3583d3d2a19c2cb2f94a899fe"
     else
       odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
@@ -14,7 +14,7 @@ class Flowwing < Formula
 
   on_linux do
     url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-linux-x86_64.deb"
-    sha256 "2746732bd2ee2aa98876b7aee5e9c38c67b717fc4bd9ecafe0a5a8c3f744e967"
+    sha256 "e420433cf961dd075409bf5c15ac4d1ac0d763296f2b897375732129d5a0a32c"
   end
 
   # Do not use  here: it is not defined on many Homebrew versions (e.g. macOS),
