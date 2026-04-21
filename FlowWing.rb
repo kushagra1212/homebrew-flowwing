@@ -6,7 +6,7 @@ class Flowwing < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-macos-arm64.zip"
-      sha256 "cf3b58fadc053806baffdfdf92b12a972954e69a252327ca94cd27d80de13738"
+      sha256 "6bb2140b73aff83e62b25ea0c2f1e2133d371baa4d4d1a5be280e6f3f450af2f"
     else
       odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
@@ -14,7 +14,7 @@ class Flowwing < Formula
 
   on_linux do
     url "https://github.com/kushagra1212/Flow-Wing/releases/download/v0.0.3-alpha/FlowWing-v0.0.3-alpha-linux-x86_64.deb"
-    sha256 "fd2e4a80a3802c2ac2b5a62271e1d3da153bf228869e8b21b5fb23eea6287708"
+    sha256 "f04316707a9ed505dfeb8772e430dd7485dba488febcabb3754accf664e6b1e3"
   end
 
   # Do not use  here: it is not defined on many Homebrew versions (e.g. macOS),
@@ -24,16 +24,22 @@ class Flowwing < Formula
 
   def install
     if OS.mac? && Hardware::CPU.arm?
-      # macOS ARM64 - flat structure matching actual zip contents
-      bin.install "bin/FlowWing"
-
-      # Bundle LLVM tools (clang++) shipped alongside FlowWing in the SDK zip.
-      # clang++ acts as both compiler and linker driver for AOT-compiled user code.
-      llvm_tools = %w[clang++ llvm-config]
-      bin.install llvm_tools.select { |t| File.exist?("bin/#{t}") }
+      # macOS ARM64 — install the whole staged bin/ (FlowWing AOT driver,
+      # FlowWing-jit JIT driver, bundled clang / clang++ linker tools).
+      #
+      # Previous version hand-picked names via
+      #   %w[clang++ llvm-config].select { |t| File.exist?("bin/\#{t}") }
+      # which (a) omitted FlowWing-jit, (b) referenced llvm-config (not
+      # shipped — see release.yml: intentionally excluded to keep installer
+      # size sane), and (c) passed bare names like "clang++" to bin.install
+      # which then looked for "./clang++" (not "./bin/clang++") and raised
+      #   Errno::ENOENT: No such file or directory - clang++
+      # on every install. Dir["bin/*"] stays in sync with whatever the SDK
+      # zip actually ships.
+      bin.install Dir["bin/*"]
 
       # Use single wildcard; Homebrew natively copies subdirectories recursively
-      lib.install Dir["lib/*"] 
+      lib.install Dir["lib/*"]
     elsif OS.linux?
       # Linux - extract .deb and install files
       deb_file = cached_download
@@ -50,5 +56,9 @@ class Flowwing < Formula
 
   test do
     system "#{bin}/FlowWing", "--version"
+    # Only the macOS SDK zip ships the JIT driver; Linux .deb bundles it too
+    # but via a different Dir[...] path. Guard with File.exist? so the test
+    # doesn't falsely fail on transitional SDK layouts.
+    system "#{bin}/FlowWing-jit", "--version" if File.exist?("#{bin}/FlowWing-jit")
   end
 end
