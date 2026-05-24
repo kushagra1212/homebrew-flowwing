@@ -1,20 +1,20 @@
 class Flowwing < Formula
   desc "A fast, simple, and easy to use programming language"
   homepage "https://github.com/kushagra1212/Flow-Wing"
-  version "v1.0.4"
+  version "v1.0.5"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/kushagra1212/Flow-Wing/releases/download/v1.0.4/FlowWing-v1.0.4-macos-arm64.zip"
-      sha256 "35be22e8790f61a07e2be8363084a3cf52e063fba11d4007e961cd341a7709e1"
+      url "https://github.com/kushagra1212/Flow-Wing/releases/download/v1.0.5/FlowWing-v1.0.5-macos-arm64.zip"
+      sha256 "5e196de84093688622c35d014f223ed2d1aaa7e1d78e0e65e708a90cd9be1156"
     else
       odie "FlowWing: this tap only publishes an Apple Silicon (arm64) macOS SDK zip. Use Linux/Windows releases or build from source on Intel Macs."
     end
   end
 
   on_linux do
-    url "https://github.com/kushagra1212/Flow-Wing/releases/download/v1.0.4/FlowWing-v1.0.4-linux-x86_64.deb"
-    sha256 "4aa69d6b274c492abdce1185f3ffebe6a46d07000c10039eb30b1875939a5ef9"
+    url "https://github.com/kushagra1212/Flow-Wing/releases/download/v1.0.5/FlowWing-v1.0.5-linux-x86_64.deb"
+    sha256 "7b7fefcf71c32e96da1350ac63fda2ca28b7c6abbf57f1f3a33cd555b8156ff7"
   end
 
   # Do not use  here: it is not defined on many Homebrew versions (e.g. macOS),
